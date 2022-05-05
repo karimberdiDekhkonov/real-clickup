@@ -15,8 +15,8 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 public class AbsUUIDEntity extends AbsMainEntity{
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @Type(type = "org.hibernate.PostgresUUIDType")
-    @GenericGenerator(name = "uuid2",strategy = "or.hibernate.id.UUIDGenerator")
+    @GeneratedValue//(generator = "uuid2")
+//    @Type(type = "org.hibernate.type.PostgresUUIDType")
+//    @GenericGenerator(name = "uuid2",strategy = "or.hibernate.id.UUIDGenerator")
     private UUID id;
 }

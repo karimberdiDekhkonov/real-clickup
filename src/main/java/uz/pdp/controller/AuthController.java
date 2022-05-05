@@ -6,10 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 import uz.pdp.entity.User;
 import uz.pdp.payload.ApiResponse;
 import uz.pdp.payload.LoginDto;
@@ -24,6 +22,8 @@ import javax.validation.Valid;
 public class AuthController {
     @Autowired
     AuthService authService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Autowired
     JwtProvider jwtProvider;
     @Autowired
@@ -46,5 +46,11 @@ public class AuthController {
         }catch (Exception e){
             return ResponseEntity.status(409).body(new ApiResponse("Password or Email is wrong",false));
         }
+    }
+
+    @PutMapping("/verifyEmail")
+    public HttpEntity<?> verifyEmail(@RequestParam String email,String emailCode) {
+        ApiResponse apiResponse = authService.verifyEmail(email,emailCode);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 }

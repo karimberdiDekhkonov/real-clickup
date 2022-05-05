@@ -97,9 +97,21 @@ public enum WorkspacePermissionName {
             Arrays.asList(WorkspaceRoleName.ROLE_OWNER, WorkspaceRoleName.ROLE_ADMIN)
     );
 
-    public final String name;
-    public final String description;
-    public final List<WorkspaceRoleName>workSpaceRoleName;
+    private final String name;
+    private final String description;
+    private final List<WorkspaceRoleName>workSpaceRoleName;
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<WorkspaceRoleName> getWorkSpaceRoleName() {
+        return workSpaceRoleName;
+    }
 
     WorkspacePermissionName(String name, String description, List<WorkspaceRoleName> workSpaceRoleName) {
         this.name = name;

@@ -14,14 +14,14 @@ import java.sql.Timestamp;
 @EntityListeners(AuditingEntityListener.class)
 public class AbsMainEntity {
 
-    @Column(nullable = false,updatable = false)
+    //@Column(nullable = false,updatable = false)
     @CreationTimestamp
     private Timestamp createdAt;
 
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    @JoinColumn(nullable = false)
+   // @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private User createdBy;
 

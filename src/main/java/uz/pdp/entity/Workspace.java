@@ -7,13 +7,22 @@ import lombok.NoArgsConstructor;
 import uz.pdp.entity.template.AbsLongEntity;
 
 import javax.persistence.*;
+import java.util.Locale;
 
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "owner_id"})})
 public class Workspace extends AbsLongEntity {
+    public Workspace(String name, String color, User owner, Attachment avatar) {
+        this.name = name;
+        this.color = color;
+        this.owner = owner;
+        this.avatar = avatar;
+    }
+
     @Column(nullable = false)
     private String name;
 
@@ -27,4 +36,10 @@ public class Workspace extends AbsLongEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     private Attachment avatar;
+
+    @PreUpdate
+    @PrePersist
+    public void myMethod(){
+        this.initialLetter=this.name.toUpperCase(Locale.ROOT).substring(0,1);
+    }
 }

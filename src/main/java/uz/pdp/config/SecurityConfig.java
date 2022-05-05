@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import uz.pdp.security.JwtFilter;
 import uz.pdp.service.AuthService;
 
 import java.util.Properties;
@@ -23,6 +25,8 @@ import java.util.Properties;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
      AuthService authService;
+    @Autowired
+    JwtFilter jwtFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -31,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated();
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
@@ -51,11 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     JavaMailSender javaMailSender(){
+
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
         mailSender.setPassword("karimberdi03");
-        mailSender.setUsername("dekhkonovvv@gmail.com");
+        mailSender.setUsername("karimberdidehqonov0921@gmail.com");
         Properties properties = mailSender.getJavaMailProperties();
         properties.put("mail.transport.protocol","smtp");
         properties.put("mail.smtp.auth","true");
