@@ -2,6 +2,7 @@ package uz.pdp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 import uz.pdp.entity.Space;
 import uz.pdp.payload.ApiResponse;
 import uz.pdp.payload.SpaceDto;
@@ -13,7 +14,7 @@ import uz.pdp.service.interfaces.SpaceService;
 
 import java.util.Optional;
 import java.util.UUID;
-
+@Service
 public class SpaceServiceImpl implements SpaceService {
     @Autowired
     AttachmentRepository attachmentRepository;

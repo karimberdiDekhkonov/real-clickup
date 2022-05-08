@@ -2,7 +2,6 @@ package uz.pdp.service.interfaces;
 
 import uz.pdp.entity.User;
 import uz.pdp.entity.Workspace;
-import uz.pdp.entity.WorkspaceRole;
 import uz.pdp.payload.*;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public interface WorkspaceService {
 
     ApiResponse joinToWorkspace(Long id, MemberDto dto);
 
-    List<WorkspaceRole> getWorkspaceRoles();
+    List<MemberDto> getWorkspaceRoles(Long id, MemberDto dto);
 
     ApiResponse addWorkspaceRole(RoleDto dto);
 

@@ -11,6 +11,7 @@ import uz.pdp.entity.enums.SystemRoleName;
 import uz.pdp.entity.template.AbsUUIDEntity;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -38,6 +39,8 @@ public class User extends AbsUUIDEntity implements UserDetails {
     private String color;
 
     private String initialLetter;
+
+    private Timestamp lastActive;
 
     @OneToOne(fetch = FetchType.LAZY)
     private Attachment avatar;

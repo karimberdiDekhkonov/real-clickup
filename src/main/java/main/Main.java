@@ -8,12 +8,18 @@ public class Main {
         while (true) {
             System.out.println("Enter the number :");
             int i = scanner.nextInt();
-            int res = myMethod(i);
+            boolean res = myMethod(i);
             System.out.println(res);
         }
     }
 
-    public static int myMethod(int n) {
-        return 0;
+    public static boolean myMethod(int n) {
+        long sum =1;
+        for (int i = 2; i <= n/2; i++) {
+            if (n%i==0){
+                sum+=i;
+            }
+        }
+        return sum==n;
     }
 }

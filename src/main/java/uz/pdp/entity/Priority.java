@@ -1,0 +1,23 @@
+package uz.pdp.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import uz.pdp.entity.template.AbsUUIDEntity;
+
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Entity
+@EqualsAndHashCode(callSuper = true)
+public class Priority extends AbsUUIDEntity {
+
+    private String name;
+
+    @OneToOne
+    private Attachment icon;
+}

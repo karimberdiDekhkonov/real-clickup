@@ -210,8 +210,19 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     }
 
     @Override
-    public List<WorkspaceRole> getWorkspaceRoles() {
-        return workspaceRoleRepository.findAll();
+    public List<MemberDto> getWorkspaceRoles(Long id, MemberDto dto) {
+        List<WorkspaceUser> workspaceUsers = workspaceUserRepository.findAllByWorkspaceId(id);
+        List<MemberDto> members = new ArrayList<>();
+        for (WorkspaceUser workspaceUser : workspaceUsers) {
+            MemberDto memberDto = new MemberDto();
+            memberDto.setId(workspaceUser.getUser().getId());
+            memberDto.setFullName(workspaceUser.getUser().getFullName());
+            memberDto.setEmail(workspaceUser.getUser().getEmail());
+            memberDto.setRoelName(workspaceUser.getWorkspaceRole().getName());
+            memberDto.setLastActive(workspaceUser.getUser().getLastActive());
+            members.add(memberDto);
+        }
+        return members;
     }
 
     @Override
@@ -251,20 +262,20 @@ public class WorkspaceServiceImpl implements WorkspaceService {
                 }
             }
             workspacePermissionRepository.saveAll(workspacePermissionList);
-        }else if (dto.getPermissionActionType().name().equals("REMOVE")){
+        } else if (dto.getPermissionActionType().name().equals("REMOVE")) {
             Optional<WorkspaceRole> optionalWorkspaceRole = workspaceRoleRepository.findById(dto.getWorkspaceRoleId());
             if (!optionalWorkspaceRole.isPresent()) {
                 return new ApiResponse("WorkspaceRole is not found", false);
             }
             String[] permissions = dto.getPermissions();
             for (String permission : permissions) {
-                workspacePermissionRepository.deleteByWorkspacePermissionNameAndAndWorkspaceRoleId(permission,dto.getWorkspaceRoleId());
+                workspacePermissionRepository.deleteByWorkspacePermissionNameAndAndWorkspaceRoleId(permission, dto.getWorkspaceRoleId());
             }
 
-        }else {
-            return new ApiResponse("Error",false);
+        } else {
+            return new ApiResponse("Error", false);
         }
-        return new ApiResponse("Success",true);
+        return new ApiResponse("Success", true);
     }
 
     public Boolean sendMail(String sendingEmail, String emailCode) {

@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.entity.User;
 import uz.pdp.entity.Workspace;
-import uz.pdp.entity.WorkspaceRole;
 import uz.pdp.payload.*;
 import uz.pdp.security.CurrentUser;
 import uz.pdp.service.interfaces.WorkspaceService;
@@ -63,9 +62,9 @@ public class WorkspaceController {
         return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 
-    @GetMapping("/getWorkspaceRoles")
-    public HttpEntity<?> getWorkspaceRoles(){
-        List<WorkspaceRole> workspaceList = workspaceService.getWorkspaceRoles();
+    @GetMapping("/getWorkspaceRoles/{id}")
+    public HttpEntity<?> getWorkspaceRoles(@PathVariable Long id,@RequestBody MemberDto dto){
+        List<MemberDto> workspaceList = workspaceService.getWorkspaceRoles(id,dto);
         return ResponseEntity.ok(workspaceList);
     }
 

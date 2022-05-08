@@ -5,12 +5,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import uz.pdp.entity.WorkspaceUser;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface WorkspaceUserRepository extends JpaRepository<WorkspaceUser, UUID> {
     Optional<WorkspaceUser>findByUserId(UUID userId);
     Optional<WorkspaceUser>findByUserIdAndWorkspaceId(UUID userId,Long workspaceId);
+    List<WorkspaceUser>findAllByWorkspaceId(Long workspaceId);
 
     @Transactional
     @Modifying
