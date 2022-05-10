@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.pdp.payload.ApiResponse;
 import uz.pdp.payload.CommentDto;
 import uz.pdp.payload.TaskDto;
+import uz.pdp.payload.taskUserDto;
 import uz.pdp.service.interfaces.TaskService;
 
 import java.util.UUID;
@@ -44,6 +45,18 @@ public class TaskController {
     @PostMapping("/addComment")
     public HttpEntity<?> addComment(@RequestBody CommentDto dto){
         ApiResponse apiResponse = taskService.addComment(dto);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
+    }
+
+    @PostMapping("/assignTaskUser")
+    public HttpEntity<?> assignTaskUser(@RequestBody taskUserDto dto){
+        ApiResponse apiResponse = taskService.assignTaskUser(dto);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
+    }
+
+    @DeleteMapping("/deleteTaskUser")
+    public HttpEntity<?> deleteTaskUser(@RequestBody taskUserDto dto){
+        ApiResponse apiResponse = taskService.deleteTaskUser(dto);
         return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 }

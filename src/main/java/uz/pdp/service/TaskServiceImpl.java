@@ -3,13 +3,11 @@ package uz.pdp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import uz.pdp.entity.Attachment;
-import uz.pdp.entity.Comment;
-import uz.pdp.entity.Task;
-import uz.pdp.entity.Task_Tag;
+import uz.pdp.entity.*;
 import uz.pdp.payload.ApiResponse;
 import uz.pdp.payload.CommentDto;
 import uz.pdp.payload.TaskDto;
+import uz.pdp.payload.taskUserDto;
 import uz.pdp.repository.*;
 import uz.pdp.service.interfaces.TaskService;
 
@@ -36,6 +34,10 @@ public class TaskServiceImpl implements TaskService {
     Task_TagRepository task_tagRepository;
     @Autowired
     TaskRepository taskRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    TaskUserRepository taskUserRepository;
 
     @Override
     public ApiResponse addTask(TaskDto dto) {
@@ -111,5 +113,27 @@ public class TaskServiceImpl implements TaskService {
                 optional.get()
         ));
         return new ApiResponse("Successfully added",true);
+    }
+
+    @Override
+    public ApiResponse assignTaskUser(taskUserDto dto) {
+        if (taskUserRepository.existsByUserIdAndTaskId(dto.getUserId(),dto.getTaskId())){
+            return new ApiResponse("This user is already exist in this task",false);
+        }
+        taskUserRepository.save( new TaskUser(
+                userRepository.findById(dto.getUserId()).orElseThrow(()-> new ResourceNotFoundException("Id")),
+                taskRepository.findById(dto.getTaskId()).orElseThrow(()-> new ResourceNotFoundException("Id"))
+        ));
+        return new ApiResponse("Successfully assigned",true);
+    }
+
+    @Override
+    public ApiResponse deleteTaskUser(taskUserDto dto) {
+        try {
+            taskUserRepository.deleteByUserIdAndTaskId(dto.getUserId(), dto.getTaskId());
+            return new ApiResponse("Successfully deleted !", true);
+        }catch (Exception e){
+            return new ApiResponse("Error",false);
+        }
     }
 }

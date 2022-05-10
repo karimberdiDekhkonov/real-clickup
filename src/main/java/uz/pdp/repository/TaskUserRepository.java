@@ -2,13 +2,15 @@ package uz.pdp.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
-import uz.pdp.entity.WorkspacePermission;
+import uz.pdp.entity.TaskUser;
 
 import javax.transaction.Transactional;
 import java.util.UUID;
 
-public interface WorkspacePermissionRepository extends JpaRepository<WorkspacePermission, UUID> {
+public interface TaskUserRepository extends JpaRepository<TaskUser, UUID> {
+    boolean existsByUserIdAndTaskId(UUID user_id, UUID task_id);
+
     @Transactional
     @Modifying
-   void deleteByWorkspacePermissionNameAndAndWorkspaceRoleId(String permissionName,UUID workspaceRoleId);
+    void deleteByUserIdAndTaskId(UUID user_id, UUID task_id);
 }
