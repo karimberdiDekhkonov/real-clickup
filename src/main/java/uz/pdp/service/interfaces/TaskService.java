@@ -1,9 +1,6 @@
 package uz.pdp.service.interfaces;
 
-import uz.pdp.payload.ApiResponse;
-import uz.pdp.payload.CommentDto;
-import uz.pdp.payload.TaskDto;
-import uz.pdp.payload.taskUserDto;
+import uz.pdp.payload.*;
 
 import java.util.UUID;
 
@@ -22,4 +19,14 @@ public interface TaskService {
     ApiResponse assignTaskUser(taskUserDto dto);
 
     ApiResponse deleteTaskUser(taskUserDto dto);
+
+    ApiResponse addCheckList(ChecklistDto dto);
+
+    ApiResponse editCheckList(UUID id, String name);
+
+    ApiResponse deleteCheckList(UUID id);
+
+    ApiResponse addCheckListItem(CheckListItemDto dto);
+
+    ApiResponse deleteCheckListItem(String name, UUID checklistId);
 }

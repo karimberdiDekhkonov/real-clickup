@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import uz.pdp.entity.*;
-import uz.pdp.payload.ApiResponse;
-import uz.pdp.payload.CommentDto;
-import uz.pdp.payload.TaskDto;
-import uz.pdp.payload.taskUserDto;
+import uz.pdp.payload.*;
 import uz.pdp.repository.*;
 import uz.pdp.service.interfaces.TaskService;
 
@@ -36,6 +33,10 @@ public class TaskServiceImpl implements TaskService {
     TaskRepository taskRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    ChecklistRepository checklistRepository;
+    @Autowired
+    CheckListItemRepository checkListItemRepository;
     @Autowired
     TaskUserRepository taskUserRepository;
 
@@ -134,6 +135,64 @@ public class TaskServiceImpl implements TaskService {
             return new ApiResponse("Successfully deleted !", true);
         }catch (Exception e){
             return new ApiResponse("Error",false);
+        }
+    }
+
+    @Override
+    public ApiResponse addCheckList(ChecklistDto dto) {
+        if (checklistRepository.existsByNameAndTaskId(dto.getName(),dto.getTaskId())){
+            return  new ApiResponse("This checkList is already exist",false);
+        }
+        checklistRepository.save(new CheckList(
+                dto.getName(),
+                taskRepository.findById(dto.getTaskId()).orElseThrow(()-> new ResourceNotFoundException("Id"))
+        ));
+        return new ApiResponse("Successfully added",true);
+    }
+
+    @Override
+    public ApiResponse editCheckList(UUID id, String name) {
+        Optional<CheckList> optional = checklistRepository.findById(id);
+        if (!optional.isPresent()){
+            return  new ApiResponse("Not found",false);
+        }
+        CheckList checkList = optional.get();
+        checkList.setName(name);
+        checklistRepository.save(checkList);
+        return new ApiResponse("Success",true);
+    }
+
+    @Override
+    public ApiResponse deleteCheckList(UUID id) {
+        try {
+            checklistRepository.deleteById(id);
+            return new ApiResponse("Successfully deleted", true);
+        }catch (Exception e){
+            return  new ApiResponse("Error",false);
+        }
+    }
+
+    @Override
+    public ApiResponse addCheckListItem(CheckListItemDto dto) {
+        if (checkListItemRepository.existsByNameAndCheckListId(dto.getName(),dto.getCheckListId())){
+            return new ApiResponse("This name is already exist in this CheckList",false);
+        }
+        checkListItemRepository.save(new CheckListItem(
+                dto.getName(),
+                checklistRepository.findById(dto.getCheckListId()).orElseThrow(()-> new ResourceNotFoundException("Id")),
+                dto.isResolved(),
+                userRepository.findById(dto.getAssignedUserId()).orElseThrow(()-> new ResourceNotFoundException("Id"))
+                ));
+        return new ApiResponse("Success",true);
+    }
+
+    @Override
+    public ApiResponse deleteCheckListItem(String name, UUID checklistId) {
+        try {
+            checkListItemRepository.deleteByNameAndCheckListId(name, checklistId);
+            return new ApiResponse("Success",true);
+        }catch (Exception e){
+         return new ApiResponse("Error",false);
         }
     }
 }
